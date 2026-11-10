@@ -1,27 +1,38 @@
+
 {
-  "name": "mern-backend-starter",
+  "name": "ascendra-backend",
   "version": "1.0.0",
-  "description": "Reusable professional MERN backend starter",
+  "private": true,
+  "description": "Backend API for the Ascendra multi-organization training and learning management platform",
   "type": "module",
   "main": "src/server.js",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "bootstrap": "node scripts/bootstrap.js",
     "test": "node --test \"test/**/*.test.js\"",
-    "test:coverage": "node --experimental-test-coverage --test \"test/**/*.test.js\""
+    "test:watch": "node --test --watch \"test/**/*.test.js\"",
+    "test:coverage": "node --experimental-test-coverage --test \"test/**/*.test.js\"",
+    "check": "npm run lint && npm test"
   },
   "keywords": [
-    "mern",
+    "ascendra",
     "backend",
+    "nodejs",
     "express",
+    "express-5",
     "mongodb",
     "mongoose",
     "rest-api",
-    "backend-starter"
+    "training-management",
+    "learning-management",
+    "multi-tenant"
   ],
-  "author": "",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.3",
