@@ -146,7 +146,7 @@ export const getRefreshCookieOptions = () => {
         httpOnly: true,
         secure: isProduction,
         sameSite: "lax",
-        path: "/api/v1/auth",
+        path: `/api/${env.app.apiVersion}/auth`,
         maxAge: env.auth.refreshToken.cookieMaxAge
     };
 };

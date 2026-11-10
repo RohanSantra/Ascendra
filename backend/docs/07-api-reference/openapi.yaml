@@ -1,0 +1,3079 @@
+openapi: 3.1.0
+info:
+  title: Ascendra Backend API
+  version: 1.0.0
+  description: Route inventory derived from the checked-in Express route registry. Request and response schemas
+    are intentionally not guessed where the implementation contract requires controller and validation inspection.
+servers:
+- url: http://localhost:5000
+  description: Local development server; the API version prefix is included in each path and defaults to v1.
+tags:
+- name: Health
+- name: Authentication
+- name: Organizations and memberships
+- name: Trainers and competencies
+- name: Matching and assignments
+- name: Courses and learning
+- name: Dashboards and engagement
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    RefreshTokenCookie:
+      type: apiKey
+      in: cookie
+      name: refreshToken
+      description: Default cookie name; configurable with JWT_REFRESH_COOKIE_NAME.
+paths:
+  /api/v1/announcements:
+    post:
+      operationId: post_api_v1_announcements
+      summary: Creates an organisation announcement draft.
+      description: 'Access: Organisation Admin. Source: src/modules/announcements/announcement.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+    get:
+      operationId: get_api_v1_announcements
+      summary: Retrieves announcements available to the current member.
+      description: 'Access: Organisation Admin, Trainer, Trainee. Source: src/modules/announcements/announcement.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/announcements/{announcementId}:
+    get:
+      operationId: get_api_v1_announcements_announcementId
+      summary: Retrieves an announcement.
+      description: 'Access: Organisation Admin, Trainer, Trainee. Source: src/modules/announcements/announcement.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: announcementId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: announcementId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+    patch:
+      operationId: patch_api_v1_announcements_announcementId
+      summary: Updates a draft announcement.
+      description: 'Access: Organisation Admin. Source: src/modules/announcements/announcement.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: announcementId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: announcementId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/announcements/{announcementId}/publish:
+    patch:
+      operationId: patch_api_v1_announcements_announcementId_publish
+      summary: Publishes a draft announcement.
+      description: 'Access: Organisation Admin. Source: src/modules/announcements/announcement.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: announcementId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: announcementId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/announcements/{announcementId}/archive:
+    patch:
+      operationId: patch_api_v1_announcements_announcementId_archive
+      summary: Archives an announcement.
+      description: 'Access: Organisation Admin. Source: src/modules/announcements/announcement.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: announcementId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: announcementId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/courses/{courseId}/assessments:
+    post:
+      operationId: post_api_v1_courses_courseId_assessments
+      summary: Creates a new draft assessment for a course.
+      description: 'Access: Trainer, Organisation Admin. Source: src/modules/assessments/assessment.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: courseId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+    get:
+      operationId: get_api_v1_courses_courseId_assessments
+      summary: Retrieves assessments belonging to a course.
+      description: 'Access: Trainer, Trainee, Organisation Admin. Source: src/modules/assessments/assessment.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: courseId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/assessments/{assessmentId}:
+    get:
+      operationId: get_api_v1_assessments_assessmentId
+      summary: Retrieves an assessment by its identifier.
+      description: 'Access: Trainer, Trainee, Organisation Admin. Source: src/modules/assessments/assessment.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: assessmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: assessmentId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+    patch:
+      operationId: patch_api_v1_assessments_assessmentId
+      summary: Updates an existing draft assessment.
+      description: 'Access: Trainer, Organisation Admin. Source: src/modules/assessments/assessment.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: assessmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: assessmentId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/assessments/{assessmentId}/publish:
+    patch:
+      operationId: patch_api_v1_assessments_assessmentId_publish
+      summary: Publishes a draft assessment.
+      description: 'Access: Trainer, Organisation Admin. Source: src/modules/assessments/assessment.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: assessmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: assessmentId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/assessments/{assessmentId}/versions:
+    post:
+      operationId: post_api_v1_assessments_assessmentId_versions
+      summary: Creates a new draft version of a published assessment.
+      description: 'Access: Trainer, Organisation Admin. Source: src/modules/assessments/assessment.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: assessmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: assessmentId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/assessments/{assessmentId}/archive:
+    patch:
+      operationId: patch_api_v1_assessments_assessmentId_archive
+      summary: Archives a published assessment.
+      description: 'Access: Trainer, Organisation Admin. Source: src/modules/assessments/assessment.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: assessmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: assessmentId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/assessments/{assessmentId}/attempts:
+    post:
+      operationId: post_api_v1_assessments_assessmentId_attempts
+      summary: Starts or resumes a trainee's assessment attempt.
+      description: 'Access: Trainee. Source: src/modules/assessments/assessment.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: assessmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: assessmentId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/assessment-attempts:
+    get:
+      operationId: get_api_v1_assessment_attempts
+      summary: Retrieves assessment attempt history.
+      description: 'Access: Trainee, Trainer, Organisation Admin. Source: src/modules/assessments/assessment.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/assessment-attempts/{attemptId}:
+    get:
+      operationId: get_api_v1_assessment_attempts_attemptId
+      summary: Retrieves an assessment attempt.
+      description: 'Access: Trainee, Trainer, Organisation Admin. Source: src/modules/assessments/assessment.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: attemptId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: attemptId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/assessment-attempts/{attemptId}/answers:
+    patch:
+      operationId: patch_api_v1_assessment_attempts_attemptId_answers
+      summary: Saves or updates answers in an active assessment attempt.
+      description: 'Access: Trainee. Source: src/modules/assessments/assessment.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: attemptId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: attemptId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/assessment-attempts/{attemptId}/submit:
+    post:
+      operationId: post_api_v1_assessment_attempts_attemptId_submit
+      summary: Submits and evaluates an assessment attempt.
+      description: 'Access: Trainee. Source: src/modules/assessments/assessment.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: attemptId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: attemptId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/auth/register:
+    post:
+      operationId: post_api_v1_auth_register
+      summary: Registers a new global user account.
+      description: 'Access: Public. Source: src/modules/auth/auth.routes.js.'
+      tags:
+      - Authentication
+      security: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/auth/login:
+    post:
+      operationId: post_api_v1_auth_login
+      summary: Authenticates a user.
+      description: 'Access: Public. Source: src/modules/auth/auth.routes.js.'
+      tags:
+      - Authentication
+      security: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/auth/forgot-password:
+    post:
+      operationId: post_api_v1_auth_forgot_password
+      summary: Sends a password-reset link when an active account exists.
+      description: 'Access: Public. Source: src/modules/auth/auth.routes.js.'
+      tags:
+      - Authentication
+      security: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/auth/reset-password:
+    post:
+      operationId: post_api_v1_auth_reset_password
+      summary: Resets a password using a single-use email token.
+      description: 'Access: Public. Source: src/modules/auth/auth.routes.js.'
+      tags:
+      - Authentication
+      security: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/auth/refresh:
+    post:
+      operationId: post_api_v1_auth_refresh
+      summary: Rotates the refresh token.
+      description: 'Access: Public (refresh cookie required). Source: src/modules/auth/auth.routes.js.'
+      tags:
+      - Authentication
+      security:
+      - RefreshTokenCookie: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/auth/logout:
+    post:
+      operationId: post_api_v1_auth_logout
+      summary: Revokes the current session.
+      description: 'Access: Public (refresh cookie used for revocation). Source: src/modules/auth/auth.routes.js.'
+      tags:
+      - Authentication
+      security:
+      - RefreshTokenCookie: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/auth/logout-all:
+    post:
+      operationId: post_api_v1_auth_logout_all
+      summary: Revokes all sessions for the authenticated user.
+      description: 'Access: Private. Source: src/modules/auth/auth.routes.js.'
+      tags:
+      - Authentication
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/auth/me:
+    get:
+      operationId: get_api_v1_auth_me
+      summary: Retrieves the authenticated user's profile.
+      description: 'Access: Private. Source: src/modules/auth/auth.routes.js.'
+      tags:
+      - Authentication
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/auth/change-password:
+    patch:
+      operationId: patch_api_v1_auth_change_password
+      summary: Changes the authenticated user's password.
+      description: 'Access: Private. Source: src/modules/auth/auth.routes.js.'
+      tags:
+      - Authentication
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/competencies:
+    post:
+      operationId: post_api_v1_competencies
+      summary: Creates a new competency for the organization.
+      description: 'Access: Admin. Source: src/modules/competencies/competency.routes.js.'
+      tags:
+      - Trainers and competencies
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+    get:
+      operationId: get_api_v1_competencies
+      summary: Retrieves the organization's competencies with
+      description: 'Access: Admin. Source: src/modules/competencies/competency.routes.js.'
+      tags:
+      - Trainers and competencies
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+  /api/v1/competencies/{id}:
+    get:
+      operationId: get_api_v1_competencies_id
+      summary: Retrieves a competency by its ID.
+      description: 'Access: Admin. Source: src/modules/competencies/competency.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+    patch:
+      operationId: patch_api_v1_competencies_id
+      summary: Updates an existing competency.
+      description: 'Access: Admin. Source: src/modules/competencies/competency.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/competencies/{id}/archive:
+    patch:
+      operationId: patch_api_v1_competencies_id_archive
+      summary: Archives a competency without permanently
+      description: 'Access: Admin. Source: src/modules/competencies/competency.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/evidence:
+    post:
+      operationId: post_api_v1_evidence
+      summary: Submits new competency evidence.
+      description: 'Access: Trainer. Source: src/modules/competencyEvidence/submissions/competencyEvidence.routes.js.'
+      tags:
+      - Trainers and competencies
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+    get:
+      operationId: get_api_v1_evidence
+      summary: Retrieves the authenticated trainer's evidence
+      description: 'Access: Trainer. Source: src/modules/competencyEvidence/submissions/competencyEvidence.routes.js.'
+      tags:
+      - Trainers and competencies
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+  /api/v1/evidence/{id}:
+    get:
+      operationId: get_api_v1_evidence_id
+      summary: Retrieves an individual evidence record
+      description: 'Access: Trainer. Source: src/modules/competencyEvidence/submissions/competencyEvidence.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+    delete:
+      operationId: delete_api_v1_evidence_id
+      summary: Soft-deletes an evidence record belonging
+      description: 'Access: Trainer. Source: src/modules/competencyEvidence/submissions/competencyEvidence.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/evidence/verification/pending:
+    get:
+      operationId: get_api_v1_evidence_verification_pending
+      summary: Retrieves pending competency evidence for
+      description: 'Access: Admin. Source: src/modules/competencyEvidence/verification/evidenceVerification.routes.js.'
+      tags:
+      - Trainers and competencies
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+  /api/v1/evidence/verification/{id}:
+    get:
+      operationId: get_api_v1_evidence_verification_id
+      summary: Retrieves individual pending evidence details.
+      description: 'Access: Admin. Source: src/modules/competencyEvidence/verification/evidenceVerification.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/evidence/verification/{id}/approve:
+    patch:
+      operationId: patch_api_v1_evidence_verification_id_approve
+      summary: Verifies submitted competency evidence.
+      description: 'Access: Admin. Source: src/modules/competencyEvidence/verification/evidenceVerification.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/evidence/verification/{id}/reject:
+    patch:
+      operationId: patch_api_v1_evidence_verification_id_reject
+      summary: Rejects submitted competency evidence with a reason.
+      description: 'Access: Admin. Source: src/modules/competencyEvidence/verification/evidenceVerification.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/courses/{courseId}/materials/upload/initiate:
+    post:
+      operationId: post_api_v1_courses_courseId_materials_upload_initiate
+      summary: Initializes a direct-to-Cloudinary course material upload.
+      description: 'Access: Trainer, Organisation Admin. Source: src/modules/courseMaterials/courseMaterial.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: courseId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/courses/{courseId}/materials/upload/confirm:
+    post:
+      operationId: post_api_v1_courses_courseId_materials_upload_confirm
+      summary: Verifies a completed Cloudinary upload and registers the course material.
+      description: 'Access: Trainer, Organisation Admin. Source: src/modules/courseMaterials/courseMaterial.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: courseId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/courses/{courseId}/materials:
+    get:
+      operationId: get_api_v1_courses_courseId_materials
+      summary: Retrieves course materials with pagination and filtering.
+      description: 'Access: Trainer, Trainee, Organisation Admin. Source: src/modules/courseMaterials/courseMaterial.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: courseId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/courses/{courseId}/materials/{materialId}/access:
+    get:
+      operationId: get_api_v1_courses_courseId_materials_materialId_access
+      summary: Generates a temporary authenticated URL for accessing a course material.
+      description: 'Access: Trainer, Trainee, Organisation Admin. Source: src/modules/courseMaterials/courseMaterial.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: courseId.'
+      - name: materialId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: materialId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/courses/{courseId}/materials/{materialId}:
+    get:
+      operationId: get_api_v1_courses_courseId_materials_materialId
+      summary: Retrieves a specific course material.
+      description: 'Access: Trainer, Trainee, Organisation Admin. Source: src/modules/courseMaterials/courseMaterial.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: courseId.'
+      - name: materialId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: materialId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+    patch:
+      operationId: patch_api_v1_courses_courseId_materials_materialId
+      summary: Updates course material metadata.
+      description: 'Access: Trainer, Organisation Admin. Source: src/modules/courseMaterials/courseMaterial.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: courseId.'
+      - name: materialId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: materialId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/courses/{courseId}/materials/{materialId}/archive:
+    patch:
+      operationId: patch_api_v1_courses_courseId_materials_materialId_archive
+      summary: Archives a course material without deleting its Cloudinary file.
+      description: 'Access: Trainer, Organisation Admin. Source: src/modules/courseMaterials/courseMaterial.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: courseId.'
+      - name: materialId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: materialId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/courses:
+    post:
+      operationId: post_api_v1_courses
+      summary: Creates a course from a trainer assignment.
+      description: 'Access: Trainer. Source: src/modules/courses/course.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+    get:
+      operationId: get_api_v1_courses
+      summary: Retrieves courses for the active organisation.
+      description: 'Access: Trainer, Organisation Admin. Source: src/modules/courses/course.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/courses/{id}:
+    get:
+      operationId: get_api_v1_courses_id
+      summary: Retrieves a course by ID.
+      description: 'Access: Trainer, Organisation Admin. Source: src/modules/courses/course.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+    patch:
+      operationId: patch_api_v1_courses_id
+      summary: Updates a draft course.
+      description: 'Access: Trainer, Organisation Admin. Source: src/modules/courses/course.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/courses/{id}/status:
+    patch:
+      operationId: patch_api_v1_courses_id_status
+      summary: Changes the lifecycle status of a course.
+      description: 'Access: Trainer, Organisation Admin. Source: src/modules/courses/course.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/organization-admin/reports/activity:
+    get:
+      operationId: get_api_v1_organization_admin_reports_activity
+      summary: Retrieves monthly aggregate activity trends.
+      description: 'Access: Organisation Admin. Source: src/modules/dashboards/organizationAdmin/routes/organizationDashboard.reporting.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/organization-admin/reports/assessment-performance:
+    get:
+      operationId: get_api_v1_organization_admin_reports_assessment_performance
+      summary: Retrieves assessment pass rates and average scores.
+      description: 'Access: Organisation Admin. Source: src/modules/dashboards/organizationAdmin/routes/organizationDashboard.reporting.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/organization-admin/reports/announcements:
+    get:
+      operationId: get_api_v1_organization_admin_reports_announcements
+      summary: Retrieves announcement lifecycle, audience and publication trends.
+      description: 'Access: Organisation Admin. Source: src/modules/dashboards/organizationAdmin/routes/organizationDashboard.reporting.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/organization-admin/reports/feedback:
+    get:
+      operationId: get_api_v1_organization_admin_reports_feedback
+      summary: Retrieves feedback trends and summaries.
+      description: 'Access: Organisation Admin. Source: src/modules/dashboards/organizationAdmin/routes/organizationDashboard.reporting.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/organization-admin/reports/course-performance:
+    get:
+      operationId: get_api_v1_organization_admin_reports_course_performance
+      summary: Retrieves course enrolment and completion statistics.
+      description: 'Access: Organisation Admin. Source: src/modules/dashboards/organizationAdmin/routes/organizationDashboard.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/organization-admin/reports/matching:
+    get:
+      operationId: get_api_v1_organization_admin_reports_matching
+      summary: Retrieves aggregate matching outcomes and assignment statistics.
+      description: 'Access: Organisation Admin. Source: src/modules/dashboards/organizationAdmin/routes/organizationDashboard.routes.js.'
+      tags:
+      - Matching and assignments
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/organization-admin/reports/evidence:
+    get:
+      operationId: get_api_v1_organization_admin_reports_evidence
+      summary: Retrieves competency evidence verification statistics.
+      description: 'Access: Organisation Admin. Source: src/modules/dashboards/organizationAdmin/routes/organizationDashboard.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/organization-admin/reports/requirements:
+    get:
+      operationId: get_api_v1_organization_admin_reports_requirements
+      summary: Retrieves requirement lifecycle distribution and creation trends.
+      description: 'Access: Organisation Admin. Source: src/modules/dashboards/organizationAdmin/routes/organizationDashboard.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/organization-admin/reports/trainer-performance:
+    get:
+      operationId: get_api_v1_organization_admin_reports_trainer_performance
+      summary: Retrieves aggregate trainer workload and course statistics.
+      description: 'Access: Organisation Admin. Source: src/modules/dashboards/organizationAdmin/routes/organizationDashboard.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/organization-admin/reports/learning-progress:
+    get:
+      operationId: get_api_v1_organization_admin_reports_learning_progress
+      summary: Retrieves aggregate course progress and learning activity.
+      description: 'Access: Organisation Admin. Source: src/modules/dashboards/organizationAdmin/routes/organizationDashboard.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/organization-admin/reports/memberships:
+    get:
+      operationId: get_api_v1_organization_admin_reports_memberships
+      summary: Retrieves membership distribution and registration trends.
+      description: 'Access: Organisation Admin. Source: src/modules/dashboards/organizationAdmin/routes/organizationDashboard.routes.js.'
+      tags:
+      - Organizations and memberships
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/platform-admin/dashboard:
+    get:
+      operationId: get_api_v1_platform_admin_dashboard
+      summary: Retrieves aggregate platform-wide dashboard statistics.
+      description: 'Access: Platform Admin. Source: src/modules/dashboards/platformAdmin/platformDashboard.routes.js.'
+      tags:
+      - Dashboards and engagement
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/courses/{courseId}/enrollments:
+    post:
+      operationId: post_api_v1_courses_courseId_enrollments
+      summary: Creates an enrollment for a trainee in a course.
+      description: 'Access: Trainee, Organisation Admin. Source: src/modules/enrollments/enrollment.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: courseId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/enrollments:
+    get:
+      operationId: get_api_v1_enrollments
+      summary: Retrieves enrollments belonging to the active organisation.
+      description: 'Access: Trainee, Trainer, Organisation Admin. Source: src/modules/enrollments/enrollment.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/enrollments/{enrollmentId}:
+    get:
+      operationId: get_api_v1_enrollments_enrollmentId
+      summary: Retrieves an enrollment by its ID.
+      description: 'Access: Trainee, Trainer, Organisation Admin. Source: src/modules/enrollments/enrollment.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: enrollmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: enrollmentId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/enrollments/{enrollmentId}/status:
+    patch:
+      operationId: patch_api_v1_enrollments_enrollmentId_status
+      summary: Updates the status of an enrollment.
+      description: 'Access: Trainee, Trainer, Organisation Admin. Source: src/modules/enrollments/enrollment.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: enrollmentId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: enrollmentId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/courses/{courseId}/feedback:
+    post:
+      operationId: post_api_v1_courses_courseId_feedback
+      summary: Submits feedback for a completed course.
+      description: 'Access: Trainee. Source: src/modules/feedback/feedback.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: courseId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/feedback:
+    get:
+      operationId: get_api_v1_feedback
+      summary: Retrieves feedback records within the user's organisation.
+      description: 'Access: Organisation Admin, Trainer, Trainee. Source: src/modules/feedback/feedback.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/feedback/{feedbackId}:
+    get:
+      operationId: get_api_v1_feedback_feedbackId
+      summary: Retrieves a feedback record.
+      description: 'Access: Organisation Admin, Trainer, Trainee. Source: src/modules/feedback/feedback.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: feedbackId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: feedbackId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/feedback/{feedbackId}/status:
+    patch:
+      operationId: patch_api_v1_feedback_feedbackId_status
+      summary: Hides or restores a feedback record.
+      description: 'Access: Organisation Admin. Source: src/modules/feedback/feedback.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: feedbackId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: feedbackId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/health/live:
+    get:
+      operationId: get_api_v1_health_live
+      summary: Reports whether the process can respond to HTTP requests.
+      description: 'Access: Public. Source: src/modules/health/health.routes.js.'
+      tags:
+      - Health
+      security: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/health/ready:
+    get:
+      operationId: get_api_v1_health_ready
+      summary: Reports whether the service is ready, including MongoDB connectivity and shutdown state.
+      description: 'Access: Public. Source: src/modules/health/health.routes.js.'
+      tags:
+      - Health
+      security: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/courses/{courseId}/materials/{materialId}/progress:
+    get:
+      operationId: get_api_v1_courses_courseId_materials_materialId_progress
+      summary: Retrieves or initializes a trainee's material progress.
+      description: 'Access: Trainee. Source: src/modules/learningProgress/learningProgress.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: courseId.'
+      - name: materialId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: materialId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+    patch:
+      operationId: patch_api_v1_courses_courseId_materials_materialId_progress
+      summary: Updates a trainee's material progress status.
+      description: 'Access: Trainee. Source: src/modules/learningProgress/learningProgress.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: courseId.'
+      - name: materialId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: materialId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/courses/{courseId}/learning-progress/summary:
+    get:
+      operationId: get_api_v1_courses_courseId_learning_progress_summary
+      summary: Retrieves a trainee's course-level learning progress summary.
+      description: 'Access: Trainee. Source: src/modules/learningProgress/learningProgress.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: courseId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/courses/{courseId}/learning-progress:
+    get:
+      operationId: get_api_v1_courses_courseId_learning_progress
+      summary: Retrieves learning progress records for a course.
+      description: 'Access: Trainer, Admin, Trainee. Source: src/modules/learningProgress/learningProgress.routes.js.'
+      tags:
+      - Courses and learning
+      parameters:
+      - name: courseId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: courseId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/matching/requirements/{requirementId}/execute:
+    post:
+      operationId: post_api_v1_matching_requirements_requirementId_execute
+      summary: Executes trainer matching for a training requirement.
+      description: 'Access: Organization Admin. Source: src/modules/matching/matching.routes.js.'
+      tags:
+      - Matching and assignments
+      parameters:
+      - name: requirementId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: requirementId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/matching/history:
+    get:
+      operationId: get_api_v1_matching_history
+      summary: Retrieves paginated matching run history.
+      description: 'Access: Organization Admin. Source: src/modules/matching/matching.routes.js.'
+      tags:
+      - Matching and assignments
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+  /api/v1/matching/history/{id}:
+    get:
+      operationId: get_api_v1_matching_history_id
+      summary: Retrieves details of a specific matching run.
+      description: 'Access: Organization Admin. Source: src/modules/matching/matching.routes.js.'
+      tags:
+      - Matching and assignments
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/matching-config/active:
+    get:
+      operationId: get_api_v1_matching_config_active
+      summary: Retrieves the active matching configuration.
+      description: 'Access: Organization Admin. Source: src/modules/matchingConfig/matchingConfig.routes.js.'
+      tags:
+      - Matching and assignments
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+  /api/v1/matching-config/versions:
+    get:
+      operationId: get_api_v1_matching_config_versions
+      summary: Lists matching configuration versions.
+      description: 'Access: Organization Admin. Source: src/modules/matchingConfig/matchingConfig.routes.js.'
+      tags:
+      - Matching and assignments
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+    post:
+      operationId: post_api_v1_matching_config_versions
+      summary: Creates a new matching configuration version.
+      description: 'Access: Organization Admin. Source: src/modules/matchingConfig/matchingConfig.routes.js.'
+      tags:
+      - Matching and assignments
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+  /api/v1/matching-config:
+    post:
+      operationId: post_api_v1_matching_config
+      summary: Creates the initial matching configuration.
+      description: 'Access: Organization Admin. Source: src/modules/matchingConfig/matchingConfig.routes.js.'
+      tags:
+      - Matching and assignments
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+  /api/v1/matching-config/versions/{id}/activate:
+    patch:
+      operationId: patch_api_v1_matching_config_versions_id_activate
+      summary: Activates an existing matching configuration version.
+      description: 'Access: Organization Admin. Source: src/modules/matchingConfig/matchingConfig.routes.js.'
+      tags:
+      - Matching and assignments
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/notifications:
+    get:
+      operationId: get_api_v1_notifications
+      summary: Retrieves notifications belonging to the current user.
+      description: 'Access: Organisation Admin, Trainer, Trainee. Source: src/modules/notifications/notification.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/notifications/unread-count:
+    get:
+      operationId: get_api_v1_notifications_unread_count
+      summary: Retrieves the unread notification count.
+      description: 'Access: Organisation Admin, Trainer, Trainee. Source: src/modules/notifications/notification.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/notifications/{notificationId}:
+    get:
+      operationId: get_api_v1_notifications_notificationId
+      summary: Retrieves one notification.
+      description: 'Access: Organisation Admin, Trainer, Trainee. Source: src/modules/notifications/notification.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: notificationId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: notificationId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/notifications/read-all:
+    patch:
+      operationId: patch_api_v1_notifications_read_all
+      summary: Marks all current-user notifications as read.
+      description: 'Access: Organisation Admin, Trainer, Trainee. Source: src/modules/notifications/notification.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/notifications/{notificationId}/read:
+    patch:
+      operationId: patch_api_v1_notifications_notificationId_read
+      summary: Marks one notification as read.
+      description: 'Access: Organisation Admin, Trainer, Trainee. Source: src/modules/notifications/notification.routes.js.'
+      tags:
+      - Dashboards and engagement
+      parameters:
+      - name: notificationId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: notificationId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/organization-invitations:
+    get:
+      operationId: get_api_v1_organization_invitations
+      summary: Retrieves organisation invitations with optional status filtering and pagination.
+      description: 'Access: Organisation Admin. Source: src/modules/organizationInvitations/organizationInvitation.routes.js.'
+      tags:
+      - Organizations and memberships
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+    post:
+      operationId: post_api_v1_organization_invitations
+      summary: Creates an invitation for a trainer or trainee.
+      description: 'Access: Organisation Admin. Source: src/modules/organizationInvitations/organizationInvitation.routes.js.'
+      tags:
+      - Organizations and memberships
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/organization-invitations/accept:
+    post:
+      operationId: post_api_v1_organization_invitations_accept
+      summary: Accepts an organisation invitation for the authenticated user.
+      description: 'Access: Authenticated User. Source: src/modules/organizationInvitations/organizationInvitation.routes.js.'
+      tags:
+      - Organizations and memberships
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/organization-invitations/{id}/revoke:
+    patch:
+      operationId: patch_api_v1_organization_invitations_id_revoke
+      summary: Revokes a pending organisation invitation.
+      description: 'Access: Organisation Admin. Source: src/modules/organizationInvitations/organizationInvitation.routes.js.'
+      tags:
+      - Organizations and memberships
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/memberships/me:
+    get:
+      operationId: get_api_v1_memberships_me
+      summary: Lists memberships of the authenticated user.
+      description: 'Access: Authenticated user. Source: src/modules/organizationMemberships/organizationMembership.routes.js.'
+      tags:
+      - Organizations and memberships
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/memberships/request:
+    post:
+      operationId: post_api_v1_memberships_request
+      summary: Requests membership in an existing organization.
+      description: 'Access: Authenticated user. Source: src/modules/organizationMemberships/organizationMembership.routes.js.'
+      tags:
+      - Organizations and memberships
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/memberships/pending:
+    get:
+      operationId: get_api_v1_memberships_pending
+      summary: Lists pending organisation membership requests.
+      description: 'Access: Admin. Source: src/modules/organizationMemberships/organizationMembership.routes.js.'
+      tags:
+      - Organizations and memberships
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+  /api/v1/memberships/{id}/approve:
+    patch:
+      operationId: patch_api_v1_memberships_id_approve
+      summary: Approves a pending membership.
+      description: 'Access: Admin. Source: src/modules/organizationMemberships/organizationMembership.routes.js.'
+      tags:
+      - Organizations and memberships
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/memberships/{id}/reject:
+    patch:
+      operationId: patch_api_v1_memberships_id_reject
+      summary: Rejects a pending membership.
+      description: 'Access: Admin. Source: src/modules/organizationMemberships/organizationMembership.routes.js.'
+      tags:
+      - Organizations and memberships
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/memberships/{id}/suspend:
+    patch:
+      operationId: patch_api_v1_memberships_id_suspend
+      summary: Suspends an approved membership.
+      description: 'Access: Admin. Source: src/modules/organizationMemberships/organizationMembership.routes.js.'
+      tags:
+      - Organizations and memberships
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/organizations:
+    get:
+      operationId: get_api_v1_organizations
+      summary: Lists active organizations available for discovery.
+      description: 'Access: Public. Source: src/modules/organizations/organization.routes.js.'
+      tags:
+      - Organizations and memberships
+      security: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/organizations/applications:
+    post:
+      operationId: post_api_v1_organizations_applications
+      summary: Submits an organization application; the applicant receives a pending admin membership.
+      description: 'Access: Authenticated user. Source: src/modules/organizations/organization.routes.js.'
+      tags:
+      - Organizations and memberships
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/organizations/applications/pending:
+    get:
+      operationId: get_api_v1_organizations_applications_pending
+      summary: Lists pending organization applications for platform review.
+      description: 'Access: Platform Administrator. Source: src/modules/organizations/organization.routes.js.'
+      tags:
+      - Organizations and memberships
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters: []
+  /api/v1/organizations/applications/{id}/approve:
+    patch:
+      operationId: patch_api_v1_organizations_applications_id_approve
+      summary: Approves an organization application.
+      description: 'Access: Platform Administrator. Source: src/modules/organizations/organization.routes.js.'
+      tags:
+      - Organizations and memberships
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/organizations/applications/{id}/reject:
+    patch:
+      operationId: patch_api_v1_organizations_applications_id_reject
+      summary: Rejects an organization application.
+      description: 'Access: Platform Administrator. Source: src/modules/organizations/organization.routes.js.'
+      tags:
+      - Organizations and memberships
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/organizations/{id}/suspend:
+    patch:
+      operationId: patch_api_v1_organizations_id_suspend
+      summary: Suspends an active organization.
+      description: 'Access: Platform Administrator. Source: src/modules/organizations/organization.routes.js.'
+      tags:
+      - Organizations and memberships
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/organizations/{id}/reactivate:
+    patch:
+      operationId: patch_api_v1_organizations_id_reactivate
+      summary: Reactivates a suspended organization.
+      description: 'Access: Platform Administrator. Source: src/modules/organizations/organization.routes.js.'
+      tags:
+      - Organizations and memberships
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/skills:
+    post:
+      operationId: post_api_v1_skills
+      summary: Creates a new skill for the organization.
+      description: 'Access: Admin. Source: src/modules/skills/skill.routes.js.'
+      tags:
+      - Trainers and competencies
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+    get:
+      operationId: get_api_v1_skills
+      summary: Retrieves organization skills with pagination,
+      description: 'Access: Admin. Source: src/modules/skills/skill.routes.js.'
+      tags:
+      - Trainers and competencies
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+  /api/v1/skills/{id}:
+    get:
+      operationId: get_api_v1_skills_id
+      summary: Retrieves a skill by its ID.
+      description: 'Access: Admin. Source: src/modules/skills/skill.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+    patch:
+      operationId: patch_api_v1_skills_id
+      summary: Updates skill information and competency associations.
+      description: 'Access: Admin. Source: src/modules/skills/skill.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/skills/{id}/archive:
+    patch:
+      operationId: patch_api_v1_skills_id_archive
+      summary: Archives a skill without permanently deleting it.
+      description: 'Access: Admin. Source: src/modules/skills/skill.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/trainer-assignments:
+    get:
+      operationId: get_api_v1_trainer_assignments
+      summary: Retrieves paginated trainer assignments.
+      description: 'Access: Organization Admin. Source: src/modules/trainerAssignments/trainerAssignment.routes.js.'
+      tags:
+      - Trainers and competencies
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+  /api/v1/trainer-assignments/requirements/{requirementId}:
+    post:
+      operationId: post_api_v1_trainer_assignments_requirements_requirementId
+      summary: Assigns a trainer to a training requirement.
+      description: 'Access: Organization Admin. Source: src/modules/trainerAssignments/trainerAssignment.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: requirementId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: requirementId.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/trainer-assignments/{id}/start:
+    patch:
+      operationId: patch_api_v1_trainer_assignments_id_start
+      summary: Starts an assigned training engagement.
+      description: 'Access: Organization Admin. Source: src/modules/trainerAssignments/trainerAssignment.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/trainer-assignments/{id}/complete:
+    patch:
+      operationId: patch_api_v1_trainer_assignments_id_complete
+      summary: Completes an in-progress training engagement.
+      description: 'Access: Organization Admin. Source: src/modules/trainerAssignments/trainerAssignment.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/trainer-assignments/{id}/cancel:
+    patch:
+      operationId: patch_api_v1_trainer_assignments_id_cancel
+      summary: Cancels an assigned or in-progress engagement.
+      description: 'Access: Organization Admin. Source: src/modules/trainerAssignments/trainerAssignment.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/trainer-assignments/{id}:
+    get:
+      operationId: get_api_v1_trainer_assignments_id
+      summary: Retrieves an individual trainer assignment.
+      description: 'Access: Organization Admin. Source: src/modules/trainerAssignments/trainerAssignment.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/trainer-approvals/pending:
+    get:
+      operationId: get_api_v1_trainer_approvals_pending
+      summary: Lists trainers awaiting eligibility approval.
+      description: 'Access: Admin. Source: src/modules/trainerProfiles/trainerApproval.routes.js.'
+      tags:
+      - Trainers and competencies
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+  /api/v1/trainer-approvals/{id}/approve:
+    patch:
+      operationId: patch_api_v1_trainer_approvals_id_approve
+      summary: Approves trainer eligibility.
+      description: 'Access: Admin. Source: src/modules/trainerProfiles/trainerApproval.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/trainer-approvals/{id}/reject:
+    patch:
+      operationId: patch_api_v1_trainer_approvals_id_reject
+      summary: Rejects trainer eligibility.
+      description: 'Access: Admin. Source: src/modules/trainerProfiles/trainerApproval.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/trainer-approvals/{id}/suspend:
+    patch:
+      operationId: patch_api_v1_trainer_approvals_id_suspend
+      summary: Suspends trainer eligibility.
+      description: 'Access: Admin. Source: src/modules/trainerProfiles/trainerApproval.routes.js.'
+      tags:
+      - Trainers and competencies
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/trainer-profiles/me:
+    get:
+      operationId: get_api_v1_trainer_profiles_me
+      summary: Retrieves the authenticated trainer's profile.
+      description: 'Access: Trainer. Source: src/modules/trainerProfiles/trainerProfile.routes.js.'
+      tags:
+      - Trainers and competencies
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+  /api/v1/trainer-profiles/me/professional-details:
+    patch:
+      operationId: patch_api_v1_trainer_profiles_me_professional_details
+      summary: Updates trainer professional information.
+      description: 'Access: Trainer. Source: src/modules/trainerProfiles/trainerProfile.routes.js.'
+      tags:
+      - Trainers and competencies
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+  /api/v1/trainer-profiles/me/availability:
+    patch:
+      operationId: patch_api_v1_trainer_profiles_me_availability
+      summary: Updates trainer availability preferences.
+      description: 'Access: Trainer. Source: src/modules/trainerProfiles/trainerProfile.routes.js.'
+      tags:
+      - Trainers and competencies
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+  /api/v1/training-requirements:
+    post:
+      operationId: post_api_v1_training_requirements
+      summary: Creates a new training requirement for the selected organization.
+      description: 'Access: Organization Admin. Source: src/modules/trainingRequirements/trainingRequirement.routes.js.'
+      tags:
+      - Matching and assignments
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+    get:
+      operationId: get_api_v1_training_requirements
+      summary: Retrieves paginated training requirements belonging to the selected organization.
+      description: 'Access: Organization Admin. Source: src/modules/trainingRequirements/trainingRequirement.routes.js.'
+      tags:
+      - Matching and assignments
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+      parameters:
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+  /api/v1/training-requirements/{id}:
+    get:
+      operationId: get_api_v1_training_requirements_id
+      summary: Retrieves a specific training requirement belonging to the selected organization.
+      description: 'Access: Organization Admin. Source: src/modules/trainingRequirements/trainingRequirement.routes.js.'
+      tags:
+      - Matching and assignments
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+    patch:
+      operationId: patch_api_v1_training_requirements_id
+      summary: Updates an existing editable training requirement.
+      description: 'Access: Organization Admin. Source: src/modules/trainingRequirements/trainingRequirement.routes.js.'
+      tags:
+      - Matching and assignments
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
+  /api/v1/training-requirements/{id}/archive:
+    patch:
+      operationId: patch_api_v1_training_requirements_id_archive
+      summary: Archives a training requirement.
+      description: 'Access: Organization Admin. Source: src/modules/trainingRequirements/trainingRequirement.routes.js.'
+      tags:
+      - Matching and assignments
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: 'Path identifier: id.'
+      - name: X-Organization-Id
+        in: header
+        required: true
+        schema:
+          type: string
+        description: Organization selected for organization-scoped authorization.
+      security:
+      - BearerAuth: []
+      responses:
+        2XX:
+          description: Successful response; see the module controller for the exact status code and response data.
+        default:
+          description: Standard Ascendra error response; see docs/07-api-reference/error-codes.md.
